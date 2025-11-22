@@ -1,0 +1,53 @@
+# Model Configuration for Hybrid Vision Transformer Speech Enhancement
+
+model:
+  name: "HybridViT"
+  input_channels: 1  # Magnitude spectrogram
+  output_channels: 1  # Enhanced magnitude spectrogram
+
+  # CNN Encoder Configuration
+  encoder:
+    channels: [64, 128, 256]  # Progressive channel expansion
+    kernel_sizes: [3, 3, 3]
+    strides: [1, 1, 1]
+    pool_sizes: [2, 2, 1]  # Downsample in first two blocks
+    dropout: 0.1
+
+  # Vision Transformer Configuration
+  transformer:
+    embed_dim: 512  # Embedding dimension
+    num_heads: 8  # Multi-head attention
+    num_layers: 6  # Transformer encoder blocks
+    mlp_ratio: 4  # MLP hidden dim = embed_dim * mlp_ratio
+    dropout: 0.1
+    attention_dropout: 0.1
+    drop_path_rate: 0.1  # Stochastic depth
+    patch_size: 4  # Patch size for embedding
+
+  # CNN Decoder Configuration
+  decoder:
+    channels: [256, 128, 64, 1]  # Progressive channel reduction
+    kernel_sizes: [3, 3, 3, 3]
+    strides: [1, 1, 1, 1]
+    upsample_factors: [1, 2, 2, 1]  # Upsample to match input
+    dropout: 0.1
+    use_skip_connections: true  # U-Net style skip connections
+
+# Audio Processing Parameters
+audio:
+  sample_rate: 16000
+  n_fft: 512
+  hop_length: 128
+  win_length: 512
+  window: "hann"
+  center: true
+  normalized: false
+  onesided: true
+
+# Spectrogram Parameters
+spectrogram:
+  n_freq_bins: 257  # (n_fft // 2) + 1
+  normalize_type: "per_utterance"  # "per_utterance" or "global"
+  log_scale: false
+  min_level_db: -100
+  ref_level_db: 20

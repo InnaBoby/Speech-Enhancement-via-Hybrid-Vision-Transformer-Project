@@ -1,0 +1,79 @@
+# Data Configuration for VoiceBank-DEMAND Dataset
+
+data:
+  # Dataset Paths
+  dataset_name: "voicebank_demand"
+  data_root: "data/voicebank_demand"
+
+  clean_train_dir: "clean_trainset_28spk_wav"
+  noisy_train_dir: "noisy_trainset_28spk_wav"
+  clean_test_dir: "clean_testset_wav"
+  noisy_test_dir: "noisy_testset_wav"
+
+  # Data Split
+  train_val_split: 0.9  # 90% train, 10% validation
+
+  # Audio Processing
+  sample_rate: 16000
+  target_length: 3.0  # Target audio length in seconds (for fixed-length training)
+  use_variable_length: true  # If true, use variable-length sequences
+
+  # Spectrogram Parameters
+  n_fft: 512
+  hop_length: 128
+  win_length: 512
+  window: "hann"
+
+  # Normalization
+  normalize_audio: true
+  normalize_spectrogram: true
+  normalization_type: "per_utterance"  # "per_utterance" or "global"
+
+  # Augmentation
+  augmentation:
+    enabled: true
+
+    # SpecAugment
+    spec_augment:
+      enabled: true
+      freq_mask_num: 2
+      freq_mask_width: 15
+      time_mask_num: 2
+      time_mask_width: 30
+
+    # Time Stretching
+    time_stretch:
+      enabled: false
+      rate_range: [0.9, 1.1]
+      probability: 0.3
+
+    # Pitch Shifting
+    pitch_shift:
+      enabled: false
+      n_steps_range: [-2, 2]
+      probability: 0.3
+
+    # Random Gain
+    random_gain:
+      enabled: true
+      gain_db_range: [-3, 3]
+      probability: 0.5
+
+    # Additional Noise
+    add_noise:
+      enabled: false
+      snr_db_range: [5, 20]
+      probability: 0.3
+
+  # Caching
+  cache:
+    enabled: false  # Cache spectrograms for faster loading
+    cache_dir: "data/cache"
+
+  # Preprocessing
+  preprocessing:
+    apply_pre_emphasis: false
+    pre_emphasis_coef: 0.97
+    apply_vad: false  # Voice Activity Detection
+    vad_threshold: 0.01
+    trim_silence: false
