@@ -242,7 +242,7 @@ class HybridViT(nn.Module):
 
             # Double input channels if using skip connections (except last layer)
             if self.use_skip_connections and i < len(channels) - 1:
-                in_ch = in_ch * 2
+                in_ch = in_ch + out_ch
 
             is_final = (i == len(channels) - 1)
 
