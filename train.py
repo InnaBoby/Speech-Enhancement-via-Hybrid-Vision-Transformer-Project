@@ -15,9 +15,9 @@ import numpy as np
 from pathlib import Path
 
 from data import VoiceBankDataset, get_data_loader
-from models import create_hybrid_vit
+from models.hybrid_vit import create_hybrid_vit
 from training import Trainer
-from utils import load_all_configs, print_config
+from utils.config import load_all_configs, print_config
 
 
 def set_seed(seed: int):
